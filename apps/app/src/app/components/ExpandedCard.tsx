@@ -14,7 +14,7 @@ export const ExpandedCard: FC<{
     >
       {label}
     </Label>
-    <div className="relative h-full w-full rounded-md border dark:border-gray-700">
+    <div className="relative h-full w-full rounded-md border dark:border-gray-800">
       <div className="relative flex h-full w-full justify-center">
         {children}
       </div>

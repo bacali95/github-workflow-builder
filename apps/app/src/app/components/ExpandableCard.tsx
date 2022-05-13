@@ -13,7 +13,7 @@ export const ExpandableCard: FC<{ children: string; onClick: () => void }> = ({
       {children}
     </Label>
     <button
-      className="rounded-md border bg-gray-100 py-8 px-16 hover:bg-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600"
+      className="rounded-md border bg-gray-100 py-8 px-16 hover:bg-gray-200 dark:border-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600"
       onClick={onClick}
     >
       Click to expand
