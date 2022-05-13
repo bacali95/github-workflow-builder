@@ -1,10 +1,8 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { JSONSchema7, JSONSchema7Type } from 'json-schema';
 import * as jsYaml from 'yaml';
 import { SchemaSwitch } from './components/SchemaSwitch';
 import { DarkThemeToggle, FileInput } from 'flowbite-react';
-import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export const App: FC = () => {
   const [workflowSchema, setWorkflowSchema] = useState<JSONSchema7>();
@@ -36,40 +34,36 @@ export const App: FC = () => {
     setWorkflowSource({ json, yaml: jsYaml.stringify(json) });
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-gray-50 p-2 dark:bg-gray-900 dark:text-white">
-      <div className="m-2 flex items-center justify-between rounded-lg bg-white py-2 px-4 shadow-md dark:bg-gray-800">
-        Github Workflow Generator
-        <DarkThemeToggle />
+    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-white dark:bg-gray-900 dark:text-white">
+      <div
+        className="absolute inset-0 [background-position-x:10px] [background-position-y:10px]
+                   [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] [background-image:url('assets/bg-light.svg')]
+                   dark:[background-image:url('assets/bg-dark.svg')] dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.5))]"
+      />
+      <div className="relative flex items-center justify-between border-b bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+        <h1 className="font-mono text-xl">Github Workflow Generator</h1>
+        <div className="flex gap-4">
+          <FileInput
+            className="w-96"
+            accept="text/x-yaml"
+            onChange={onFileLoaded}
+          />
+          <DarkThemeToggle />
+        </div>
       </div>
-      <div className="flex flex-grow overflow-hidden">
-        <div className="m-2 w-full flex-grow overflow-hidden rounded-lg bg-white p-4 shadow-md dark:bg-gray-800">
-          <div className="h-full overflow-auto p-1">
-            {workflowSchema && workflowSource && (
-              <SchemaSwitch
-                json={workflowSource.json}
-                schema={workflowSchema}
-                definitions={workflowSchema.definitions ?? {}}
-                onChange={handleChange}
-              />
-            )}
-          </div>
-        </div>
-        <div className="flex w-full flex-col gap-4 overflow-hidden p-2">
-          <div className="rounded-lg bg-white p-4 shadow-md dark:bg-gray-800">
-            <FileInput accept="text/x-yaml" onChange={onFileLoaded} />
-          </div>
-          <div className="flex-grow overflow-hidden rounded-lg bg-white p-4 shadow-md dark:bg-gray-800">
-            {workflowSource && (
-              <SyntaxHighlighter
-                className="h-full overflow-auto border dark:border-gray-700"
-                language="yaml"
-                style={darcula}
-              >
-                {workflowSource.yaml}
-              </SyntaxHighlighter>
-            )}
-          </div>
-        </div>
+      <div className="relative flex flex-grow items-center justify-center overflow-hidden p-2">
+        {workflowSchema && workflowSource ? (
+          <SchemaSwitch
+            json={workflowSource.json}
+            schema={workflowSchema}
+            definitions={workflowSchema.definitions ?? {}}
+            onChange={handleChange}
+          />
+        ) : (
+          <p className="font-mono text-2xl text-gray-500">
+            Select a file (example: build.yaml)
+          </p>
+        )}
       </div>
     </div>
   );
