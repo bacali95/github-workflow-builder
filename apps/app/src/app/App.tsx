@@ -13,6 +13,12 @@ export const App: FC = () => {
     json: JSONSchema7Type;
   }>();
 
+  useEffect(() => {
+    fetch('https://json.schemastore.org/github-workflow.json')
+      .then((res) => res.json())
+      .then(setWorkflowSchema);
+  }, []);
+
   const onFileLoaded = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -20,17 +26,14 @@ export const App: FC = () => {
       fileReader.onload = ({ target }) => {
         const yaml = (target?.result as string) ?? '';
         const json = jsYaml.parse(yaml) as JSONSchema7Type;
-        setWorkflowSource({ yaml, json });
+        setWorkflowSource({ yaml: jsYaml.stringify(json), json });
       };
       fileReader.readAsBinaryString(file);
     }
   };
 
-  useEffect(() => {
-    fetch('https://json.schemastore.org/github-workflow.json')
-      .then((res) => res.json())
-      .then(setWorkflowSchema);
-  }, []);
+  const handleChange = (json: JSONSchema7Type) =>
+    setWorkflowSource({ json, yaml: jsYaml.stringify(json) });
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-gray-50 p-2 dark:bg-gray-900 dark:text-white">
@@ -46,6 +49,7 @@ export const App: FC = () => {
                 json={workflowSource.json}
                 schema={workflowSchema}
                 definitions={workflowSchema.definitions ?? {}}
+                onChange={handleChange}
               />
             )}
           </div>
