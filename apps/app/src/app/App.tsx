@@ -26,7 +26,7 @@ export const App: FC = () => {
         const json = jsYaml.parse(yaml) as JSONSchema7Type;
         setWorkflowSource({ yaml: jsYaml.stringify(json), json });
       };
-      fileReader.readAsBinaryString(file);
+      fileReader.readAsText(file);
     }
   };
 

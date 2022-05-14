@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { Props } from './types';
 import { JSONSchema7Array } from 'json-schema';
-import { handleOnChange } from '../helpers';
+import { handleOnChange, resolveIndexSchema } from '../helpers';
 import { SchemaSwitch } from './SchemaSwitch';
 import { SchemaItemSwitch } from './SchemaSwitchItem';
 import { ExpandedCard } from './ExpandedCard';
@@ -30,10 +30,10 @@ export const ArrayValue: FC<Props> = (props) => {
         (array as JSONSchema7Array).map((value, index) => {
           if (!value) return undefined;
 
-          const newSchema =
-            schema.items instanceof Array
-              ? schema.items[0]
-              : schema.items ?? {};
+          const newSchema = resolveIndexSchema(index, schema, definitions);
+
+          if (!newSchema) return undefined;
+
           const itemProps = {
             parentJson: array as JSONSchema7Array,
             json: value,

@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { Props } from './types';
 import { JSONSchema7Object } from 'json-schema';
-import { handleOnChange, resolveDefinition, resolveType } from '../helpers';
+import { handleOnChange, resolvePropertySchema, resolveType } from '../helpers';
 import { SchemaSwitch } from './SchemaSwitch';
 import { SchemaItemSwitch } from './SchemaSwitchItem';
 import { ExpandedCard } from './ExpandedCard';
@@ -12,8 +12,6 @@ export const ObjectValue: FC<Props> = (props) => {
   const [expandedItem, setExpendedItem] = useState<Props>();
 
   if (typeof schema === 'boolean') return null;
-
-  const properties = { ...schema.properties, ...schema.patternProperties };
 
   return (
     <ExpandedCard
@@ -26,22 +24,20 @@ export const ObjectValue: FC<Props> = (props) => {
         Object.entries(json as JSONSchema7Object).map(([key, value], index) => {
           if (!value) return undefined;
 
-          const schemaKey = Object.keys(properties).find((propertyName) =>
-            new RegExp(propertyName).test(key)
-          );
-
-          if (!schemaKey) return undefined;
-
-          const schema = resolveDefinition(
+          const newSchema = resolvePropertySchema(
+            key,
             resolveType(value),
-            properties[schemaKey],
+            schema,
             definitions
           );
+
+          if (!newSchema) return undefined;
+
           const itemProps = {
             parentJson: json as JSONSchema7Object,
             json: value,
             propertyName: key,
-            schema,
+            schema: newSchema,
             definitions,
             onChange: handleOnChange(parentJson, propertyName, onChange),
           };

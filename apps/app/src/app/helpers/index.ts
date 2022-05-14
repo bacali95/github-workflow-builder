@@ -1,3 +1,5 @@
 export * from './handleOnChange';
-export * from './resolveDefinition';
+export * from './resolveIndexSchema';
+export * from './resolvePropertySchema';
+export * from './resolveSchema';
 export * from './resolveType';
