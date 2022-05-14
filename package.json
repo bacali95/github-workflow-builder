@@ -6,9 +6,9 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "lint": "nx affected:lint",
-    "prettier": "nx format:check",
-    "prettier:fix": "nx format:write"
+    "lint": "nx lint",
+    "prettier": "nx format:check --all",
+    "prettier:fix": "nx format:write --all"
   },
   "homepage": "https://bacali95.github.io/github-workflow-builder/",
   "author": {
@@ -23,7 +23,6 @@
     "url": "https://github.com/bacali95/github-workflow-builder",
     "type": "git"
   },
-
   "private": true,
   "dependencies": {
     "core-js": "^3.6.5",
